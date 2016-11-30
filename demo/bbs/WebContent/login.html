@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户登录</title>
+<!-- 视口设置 -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<!-- 引入bootstrap的css -->
+<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css">
+</head>
+<body>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<h3 class="page-header">
+					用户登录
+				</h3>
+				<form id="form1" class="form-horizontal">
+					<div class="form-group">
+						<label for="" class="col-sm-3">用户名称</label>
+						<div class="col-sm-9">
+							<input type="text" name="username" id="username" placeholder="请输入用户名称" class="form-control">
+						</div>				
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-3">密码</label>
+						<div class="col-sm-9">
+							<input type="password" name="userpwd" id="userpwd" placeholder="请输入密码" class="form-control">
+						</div>				
+					</div>					
+					<div class="form-group">						
+						<div class="col-sm-12">
+							<input id="loginBtn" type="button" value="登录系统" class="btn btn-primary btn-block">
+						</div>				
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- 引入juery.js -->
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<!-- 引入bootstrap.js -->
+	<script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>
+	<!-- 引入layer.js -->
+	<script type="text/javascript" src="js/layer/layer.js"></script>
+	<!-- 判断，如果是IE9以下，引入兼容h5标签的js文件，注意空格的位置 -->	
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="js/bootstrap/js/html5shiv.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap/js/respond.min.js"></script>
+	<![end if] -->
+	<!-- 引入公共全局js -->
+	<script type="text/javascript" src="js/global.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			/**
+				表单验证函数
+			*/
+			function checkForm() {
+
+				// 验证用户名
+				var usernameVal = $('#username').val();
+
+				if (usernameVal == '') {
+					layer.msg('用户名不能为空');
+					return false;
+				}
+
+				// 验证密码
+				var userpwdVal = $('#userpwd').val();
+
+				if (usernameVal == '') {
+					layer.msg('密码不能为空');
+					return false;
+				}				
+
+				return true;
+			}
+
+			
+			/*
+				用户登录操作
+			*/
+			$('#loginBtn').click(function(event) {
+
+				// 调用表单验证
+				if ( !checkForm() ) {
+					return;
+				}
+				
+				// 请求参数
+				var params = $('#form1').serialize();
+
+				// 发出ajax请求进行登录验证
+				$.post(baseUrl + 'bbs2/LoginServlet', params, function(data, textStatus, xhr) {
+
+					if (data == 1) {
+						layer.msg('用户名不存在！');
+					} else if (data == 2) {
+						layer.msg('密码错误');
+					} else if (data == 3) {
+						location.href = 'index.html';
+					}
+					
+				});
+
+			});
+			
+
+		});	
+	</script>
+
+</body>
+</html>
